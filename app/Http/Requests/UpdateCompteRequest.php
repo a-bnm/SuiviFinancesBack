@@ -24,7 +24,6 @@ class UpdateCompteRequest extends FormRequest
         return [
             'designation' => 'required|string',
             'montant' => 'required|numeric',
-            'user_id' => 'required',
             'description' => 'required|min:10',
         ];
     }
