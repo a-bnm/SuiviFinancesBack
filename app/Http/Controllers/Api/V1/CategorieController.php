@@ -24,7 +24,7 @@ class CategorieController extends Controller
     public function store(StoreCategorieRequest $request)
     {
         $categorie = Categorie::create($request->validated());
-        return new CategorieResource($categorie);
+        return response()->json(["message" => "Votre catégorie a été créé avec succés" ]);
     }
 
     /**
@@ -33,6 +33,7 @@ class CategorieController extends Controller
     public function show(Categorie $categorie)
     {
         return new CategorieResource(Categorie::findOrFail($categorie->id));
+
     }
 
     /**
