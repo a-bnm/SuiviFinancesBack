@@ -17,7 +17,7 @@ class Achat extends Model
         'libelle'
     ];
 
-   /* public function categorie():BelongsTo
+    public function categorie():BelongsTo
     {
         return $this->belongsTo(Categorie::class);
     }
@@ -25,5 +25,5 @@ class Achat extends Model
     public function compte():BelongsTo
     {
         return $this->belongsTo(Compte::class);
-    }*/
+    }
 }

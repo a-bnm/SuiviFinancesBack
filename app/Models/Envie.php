@@ -11,7 +11,7 @@ class Envie extends Model
     use HasFactory;
 
     protected $fillable = [
-        'desigantion',
+        'designation',
         'cout',
         'cout_rassemble',
         'cout_restant',

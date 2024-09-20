@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('envies', function (Blueprint $table) {
             $table->id();
-            $table->string('desigantion');
+            $table->string('designation');
             $table->integer('cout');
             $table->integer('cout_rassemble');
             $table->integer('cout_restant');

@@ -16,7 +16,7 @@ class EnvieResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'desigantion' => $this->designation,
+            'designation' => $this->designation,
             'cout' => $this->cout,
             'cout_rassemble' => $this->cout_rassemble,
             'cout_restant' => $this->cout_restant,

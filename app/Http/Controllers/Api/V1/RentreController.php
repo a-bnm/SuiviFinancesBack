@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Rentre;
+use App\Models\Compte;
 use App\Http\Requests\StoreRentreRequest;
 use App\Http\Requests\UpdateRentreRequest;
 use App\Http\Resources\RentreResource;
@@ -23,8 +24,21 @@ class RentreController extends Controller
      */
     public function store(StoreRentreRequest $request)
     {
-        $rentre = Rentre::create($request->validated());
-        return new RentreResource($rentre);
+        $request->validated();
+
+        $rentre = Rentre::create([
+            "source" => $request->source,
+            "montant" => $request->montant,
+            "compte_id" => $request->compte_id
+        ]);
+
+        //Mise à jour du compte
+        $compte = Compte::where('id',$rentre->compte_id)->get()->first();
+        $compte->update([
+            "montant" => $compte->montant + $rentre->montant,
+        ]);
+
+        return response()->json(["message" => "Votre rentrée d'argent a été créé avec succés" ]);
     }
 
     /**
@@ -40,8 +54,22 @@ class RentreController extends Controller
      */
     public function update(UpdateRentreRequest $request, Rentre $rentre)
     {
-        $rentre->update($request->validated());
-        return new RentreResource($rentre);
+        $request->validated();
+
+        $oldMontant = $rentre->montant;
+        
+        $rentre->update([
+            "source" => $request->source,
+            "montant" => $request->montant,
+            //"compte_id" => $request->compte_id
+        ]);
+
+        //Mise à jour du compte
+        $compte = Compte::where('id',$rentre->compte_id)->get()->first();
+        $compte->update([
+            "montant" => $compte->montant - $oldMontant + $rentre->montant,
+        ]);
+        return response()->json(["message" => "Votre rentrée d'argent a été modifié avec succés" ]);
     }
 
     /**

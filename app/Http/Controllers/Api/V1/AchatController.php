@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Achat;
+use App\Models\Compte;
 use App\Http\Requests\StoreAchatRequest;
 use App\Http\Requests\UpdateAchatRequest;
 use App\Http\Resources\AchatResource;
@@ -24,7 +25,14 @@ class AchatController extends Controller
     public function store(StoreAchatRequest $request)
     {
         $achat = Achat::create($request->validated());
-        return new AchatResource($achat);
+        
+        //Mise à jour du compte
+        $compte = Compte::where('id',$achat->compte_id)->get()->first();
+        $compte->update([
+            "montant" => $compte->montant - $achat->montant,
+        ]);
+        
+        return response()->json(["message" => "Votre achat a été créé avec succés" ]);
     }
 
     /**
@@ -40,8 +48,15 @@ class AchatController extends Controller
      */
     public function update(UpdateAchatRequest $request, Achat $achat)
     {
+        $oldMontant = $achat->montant;
         $achat->update($request->validated());
-        return new AchatResource($achat);
+        //Mise à jour du compte
+        $compte = Compte::where('id',$achat->compte_id)->get()->first();
+        $compte->update([
+            "montant" => $compte->montant + $oldMontant - $achat->montant,
+        ]);
+        
+        return response()->json(["message" => "Votre achat a été mis à jour avec succés" ]);
     }
 
     /**

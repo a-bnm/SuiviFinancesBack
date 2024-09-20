@@ -22,11 +22,9 @@ class UpdateEnvieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'desigantion' => 'required|string',
+            'designation' => 'required|string',
             'cout' => 'required|numeric',
             'cout_rassemble' => 'required|numeric',
-            'cout_restant' => 'required|numeric',
-            'user_id' => 'required',
             'description' => 'required|string|min:10',
         ];
     }
