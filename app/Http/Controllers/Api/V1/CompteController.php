@@ -7,15 +7,28 @@ use App\Http\Requests\StoreCompteRequest;
 use App\Http\Requests\UpdateCompteRequest;
 use App\Http\Resources\CompteResource;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class CompteController extends Controller
 {
+
+    public function dataCompte(Compte $compte){
+      
+        //récupération des depenses du compte
+        $compte->depenses = Depense::where('compte_id',$compte->id)->get();
+
+        return new CompteDataResource($compte);
+
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return CompteResource::collection(Compte::all());
+        $comptes = Compte::where('user_id',Auth::user()->id)->get();
+       
+        return CompteResource::collection($comptes);
     }
 
     /**

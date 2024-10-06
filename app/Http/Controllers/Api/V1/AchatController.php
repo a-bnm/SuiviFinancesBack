@@ -8,6 +8,7 @@ use App\Http\Requests\StoreAchatRequest;
 use App\Http\Requests\UpdateAchatRequest;
 use App\Http\Resources\AchatResource;
 use App\Http\Controllers\Controller;
+use Auth;
 
 class AchatController extends Controller
 {
@@ -16,7 +17,12 @@ class AchatController extends Controller
      */
     public function index()
     {
-        return AchatResource::collection(Achat::all());
+        $comptes_id = Compte::select('id')
+            ->where('user_id',Auth::user()->id)
+            ->pluck('id');
+
+        $achats = Achat::whereIn('compte_id',$comptes_id)->get();
+        return AchatResource::collection($achats);
     }
 
     /**

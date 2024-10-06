@@ -8,6 +8,8 @@ use App\Http\Requests\StoreRentreRequest;
 use App\Http\Requests\UpdateRentreRequest;
 use App\Http\Resources\RentreResource;
 use App\Http\Controllers\Controller;
+use Auth;
+
 
 class RentreController extends Controller
 {
@@ -16,7 +18,12 @@ class RentreController extends Controller
      */
     public function index()
     {
-        return RentreResource::collection(Rentre::all());
+        $comptes_id = Compte::select('id')
+            ->where('user_id',Auth::user()->id)
+            ->pluck('id');
+
+        $rentres = Rentre::whereIn('compte_id',$comptes_id)->get();
+        return RentreResource::collection($rentres);
     }
 
     /**
